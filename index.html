@@ -602,10 +602,11 @@ renderTabs(); renderGrid(); renderSelect();
   function apply(theme, persist){
     root.setAttribute('data-theme', theme);
     icon.innerHTML = theme === 'dark' ? moon : sun;
-    if(persist){ try{ localStorage.setItem('bu-theme', theme); }catch(e){} }
+    if(persist){ try{ localStorage.setItem('bu-theme-manual', theme); }catch(e){} }
   }
   let saved = null;
-  try{ saved = localStorage.getItem('bu-theme'); }catch(e){}
+  // only a manual toggle choice is remembered; older auto-saved values are discarded
+  try{ localStorage.removeItem('bu-theme'); saved = localStorage.getItem('bu-theme-manual'); }catch(e){}
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   apply(saved || (prefersDark ? 'dark' : 'light'), false);
   // follow the device setting live, unless the visitor chose a theme manually
@@ -613,7 +614,7 @@ renderTabs(); renderGrid(); renderSelect();
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const onSys = e=>{
       let chosen = null;
-      try{ chosen = localStorage.getItem('bu-theme'); }catch(err){}
+      try{ chosen = localStorage.getItem('bu-theme-manual'); }catch(err){}
       if(!chosen) apply(e.matches ? 'dark' : 'light', false);
     };
     if(mq.addEventListener) mq.addEventListener('change', onSys); else if(mq.addListener) mq.addListener(onSys);
@@ -947,8 +948,7 @@ html[data-theme="dark"] .bu2-addon-photo{background:linear-gradient(135deg,#3b2a
       {n:"Wedding", s:"Stage & floral backdrops", src:pic("Fresh Flower Decor",2)},
       {n:"Engagement", s:"Arches & floral frames", src:pic("Fresh Flower Decor",11)},
       {n:"Graduation", s:"Bright bouquets to celebrate", src:pic("Bouquets",5)},
-      {n:"Welcome", s:"Baby & homecoming decor", src:pic("Balloon Decor",42)},
-      {n:"Just Because", s:"Fresh flowers, no reason needed", src:pic("Bouquets",2)}
+      {n:"Welcome", s:"Baby & homecoming decor", src:pic("Balloon Decor",42)}
     ];
     const occHTML = occ.map(o=>`<a class="bu2-occ-card bu2-r" href="${esc(link("Hi Usman, I'm looking for flowers / decor for a "+o.n+". Could you help me with options?"))}" target="_blank" rel="noopener" aria-label="${esc(o.n)} — plan on WhatsApp">
         ${img(o.src,o.n+" flowers and decor")}
