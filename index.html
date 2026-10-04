@@ -720,5 +720,300 @@ renderTabs(); renderGrid(); renderSelect();
 }
 </style>
 
+
+<!-- New sections: Best Sellers, Shop by Occasion, Custom Bouquet, Add-ons, Reviews + Instagram (additive) -->
+<style>
+:root{--bu2-pad:32px;--bu2-gap:22px;}
+@media(max-width:600px){:root{--bu2-pad:24px;}}
+@media(max-width:380px){:root{--bu2-pad:20px;}}
+.bu2-tint{background:linear-gradient(180deg,rgba(243,195,212,.16),rgba(255,224,234,.28));}
+html[data-theme="dark"] .bu2-tint{background:linear-gradient(180deg,rgba(194,107,138,.08),rgba(194,107,138,.14));}
+.bu2-sub{color:var(--text-muted);font-size:1rem;line-height:1.65;margin-top:12px;max-width:56ch;}
+.bu2-center{text-align:center;margin-left:auto;margin-right:auto;}
+.bu2-center .bu2-sub{margin-left:auto;margin-right:auto;}
+.bu2-ico{width:18px;height:18px;flex:none;display:block;fill:currentColor;}
+.bu2-wa-btn,.bu2-ig-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;font-family:inherit;border-radius:40px;color:#fff;transition:transform .25s,background .25s,box-shadow .25s;text-align:center;}
+.bu2-wa-btn{background:#25D366;padding:16px 34px;font-size:1.05rem;box-shadow:0 16px 30px -14px rgba(37,211,102,.55);}
+.bu2-wa-btn:hover{background:#1ebc59;transform:translateY(-2px);}
+.bu2-ig-btn{background:var(--rose-deep);padding:14px 30px;font-size:.98rem;box-shadow:0 14px 28px -14px rgba(194,107,138,.55);}
+.bu2-ig-btn:hover{background:#a95575;transform:translateY(-2px);}
+.bu2-ig-btn .bu2-ico{fill:none;stroke:currentColor;stroke-width:2;width:20px;height:20px;}
+
+/* reveal on scroll */
+.bu2-js .bu2-r{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+.bu2-js .bu2-r.bu2-in{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){.bu2-js .bu2-r{opacity:1;transform:none;transition:none;}}
+
+/* best sellers */
+.bu2-bs .card-photo img{object-position:center 40%;}
+.bu2-bs .order-btn{display:flex;align-items:center;justify-content:center;gap:8px;}
+.bu2-bs .order-btn .bu2-ico{width:16px;height:16px;}
+.bu2-bs .price.bu2-soon{font-size:1.25rem;font-style:italic;}
+
+/* occasions */
+.bu2-occ{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--bu2-gap);}
+.bu2-occ-card{position:relative;display:block;flex:0 0 calc((100% - 3*var(--bu2-gap))/4);aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--surface);border:1px solid var(--border-soft);box-shadow:0 18px 30px -22px rgba(150,80,105,.45);transition:transform .35s,box-shadow .35s;-webkit-tap-highlight-color:transparent;}
+.bu2-occ-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s ease;}
+.bu2-occ-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(74,54,64,0) 38%,rgba(74,54,64,.82) 100%);transition:background .35s;}
+.bu2-occ-cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 18px 20px;color:#fff;}
+.bu2-occ-cap h3{font-size:1.5rem;color:#fff;line-height:1.1;}
+.bu2-occ-cap span{display:block;font-size:.8rem;letter-spacing:.06em;margin-top:6px;opacity:.92;max-height:0;overflow:hidden;transition:max-height .35s,opacity .35s;}
+.bu2-occ-card:focus-visible{outline:2px solid var(--rose-deep);outline-offset:3px;}
+@media(hover:hover){
+  .bu2-occ-card:hover{transform:translateY(-6px);box-shadow:0 28px 40px -22px rgba(168,59,96,.55);}
+  .bu2-occ-card:hover img{transform:scale(1.09);}
+  .bu2-occ-card:hover::after{background:linear-gradient(180deg,rgba(168,59,96,.08) 25%,rgba(120,40,70,.88) 100%);}
+  .bu2-occ-card:hover .bu2-occ-cap span{max-height:30px;}
+}
+.bu2-occ-card:active{transform:scale(.98);}
+@media(max-width:900px){.bu2-occ-card{flex-basis:calc((100% - 2*var(--bu2-gap))/3);}}
+@media(max-width:600px){
+  .bu2-occ{gap:14px;}
+  .bu2-occ-card{flex-basis:calc((100% - 14px)/2);}
+  .bu2-occ-card:last-child:nth-child(odd){flex-basis:100%;aspect-ratio:16/9;}
+  .bu2-occ-cap{padding:14px 14px 16px;}
+  .bu2-occ-cap h3{font-size:1.3rem;}
+  .bu2-occ-cap span{display:none;}
+}
+
+/* custom bouquet */
+.bu2-custom{background:linear-gradient(135deg,rgba(243,195,212,.5),rgba(255,224,234,.3) 60%,rgba(243,195,212,.35));position:relative;overflow:hidden;}
+html[data-theme="dark"] .bu2-custom{background:linear-gradient(135deg,rgba(194,107,138,.22),rgba(194,107,138,.08) 60%,rgba(194,107,138,.16));}
+.bu2-custom-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;}
+.bu2-custom h2{font-size:clamp(2rem,4.2vw,3.1rem);line-height:1.08;}
+.bu2-steps{list-style:none;margin:28px 0 32px;display:grid;gap:16px;}
+.bu2-steps li{display:flex;align-items:flex-start;gap:14px;color:var(--text);line-height:1.5;}
+.bu2-steps b{flex:none;width:34px;height:34px;border-radius:50%;background:var(--rose-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;}
+.bu2-steps small{display:block;color:var(--text-muted);font-size:.9rem;margin-top:2px;}
+.bu2-custom-photo{position:relative;max-width:420px;margin-left:auto;width:100%;}
+.bu2-custom-photo .bu2-frame{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:4/5;border:6px solid var(--surface);box-shadow:0 40px 70px -30px rgba(150,80,105,.55);transform:rotate(-2deg);transition:transform .35s;}
+.bu2-custom-photo .bu2-frame:hover{transform:rotate(0) scale(1.02);}
+.bu2-custom-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.bu2-custom-photo::before{content:"";position:absolute;inset:-12px -12px 12px 12px;border:1px solid rgba(194,107,138,.35);border-radius:22px;transform:rotate(2deg);}
+@media(max-width:860px){
+  .bu2-custom-grid{grid-template-columns:1fr;gap:44px;}
+  .bu2-custom-photo{margin:0 auto;max-width:380px;}
+  .bu2-custom-photo::before{display:none;}
+}
+@media(max-width:600px){
+  .bu2-custom-grid > div:first-child{text-align:center;}
+  .bu2-steps{text-align:left;margin:24px 0 28px;}
+  .bu2-custom .section-head{margin-left:auto;margin-right:auto;}
+}
+@media(max-width:480px){.bu2-custom .bu2-wa-btn{width:100%;padding:16px 18px;font-size:1rem;}}
+
+/* swipe-capable grids */
+.bu2-addons{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--bu2-gap);}
+.bu2-addon{background:var(--surface);border:1px solid var(--border-soft);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .25s,transform .25s;}
+.bu2-addon:hover{box-shadow:0 20px 30px -20px rgba(168,59,96,.35);transform:translateY(-3px);}
+.bu2-addon-photo{width:100%;aspect-ratio:4/3;overflow:hidden;background:linear-gradient(135deg,var(--rose-soft),var(--rose-mid));display:flex;align-items:center;justify-content:center;}
+html[data-theme="dark"] .bu2-addon-photo{background:linear-gradient(135deg,#3b2a32,#4a3640);}
+.bu2-addon-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;}
+.bu2-addon:hover .bu2-addon-photo img{transform:scale(1.06);}
+.bu2-addon-photo svg{width:84px;height:84px;fill:none;stroke:var(--rose-deep);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.bu2-addon-body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1;}
+.bu2-addon h3{font-size:1.3rem;color:var(--text);margin-bottom:6px;}
+.bu2-addon p{font-size:.9rem;color:var(--text-muted);line-height:1.55;flex:1;}
+.bu2-addon .bu2-add{margin-top:16px;background:transparent;border:1px solid var(--rose-deep);color:var(--rose-deep);padding:10px;border-radius:30px;font-size:.88rem;font-family:inherit;cursor:pointer;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.bu2-addon .bu2-add:hover{background:var(--rose-deep);color:#fff;}
+.bu2-addon .bu2-add .bu2-ico{width:15px;height:15px;}
+
+/* reviews */
+.bu2-reviews{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--bu2-gap);}
+.bu2-review{background:var(--surface);border:1px solid var(--border-soft);border-radius:14px;padding:26px 22px;display:flex;flex-direction:column;position:relative;transition:transform .25s,box-shadow .25s;}
+.bu2-review:hover{transform:translateY(-4px);box-shadow:0 20px 30px -20px rgba(168,59,96,.3);}
+.bu2-stars{display:flex;gap:3px;margin-bottom:14px;}
+.bu2-stars svg{width:18px;height:18px;fill:#e9b44c;}
+.bu2-review q{quotes:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.18rem;line-height:1.5;color:var(--text);flex:1;}
+.bu2-review cite{display:block;font-style:normal;margin-top:18px;padding-top:14px;border-top:1px solid var(--border-soft);font-size:.82rem;letter-spacing:.04em;color:var(--rose-deep);}
+
+/* instagram */
+.bu2-ig{margin-top:84px;}
+.bu2-ig-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:34px;}
+.bu2-ig-tile{position:relative;aspect-ratio:1;overflow:hidden;border-radius:10px;display:block;background:var(--surface);}
+.bu2-ig-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s;}
+.bu2-ig-tile::after{content:"";position:absolute;inset:0;background:rgba(168,59,96,.0);transition:background .3s;}
+.bu2-ig-tile svg{position:absolute;z-index:2;left:50%;top:50%;width:30px;height:30px;margin:-15px 0 0 -15px;fill:none;stroke:#fff;stroke-width:2;color:#fff;opacity:0;transform:scale(.7);transition:opacity .3s,transform .3s;}
+@media(hover:hover){
+  .bu2-ig-tile:hover img{transform:scale(1.1);}
+  .bu2-ig-tile:hover::after{background:rgba(168,59,96,.45);}
+  .bu2-ig-tile:hover svg{opacity:1;transform:none;}
+}
+.bu2-ig-cta{text-align:center;margin-top:32px;}
+
+/* tablet */
+@media(max-width:999px){.bu2-reviews{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:700px){
+  .bu2-swipe{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:14px;
+    margin-left:calc(-1*var(--bu2-pad));margin-right:calc(-1*var(--bu2-pad));padding:4px var(--bu2-pad) 16px;scroll-padding:0 var(--bu2-pad);scrollbar-width:none;}
+  .bu2-swipe::-webkit-scrollbar{display:none;}
+  .bu2-swipe > *{flex:0 0 80%;max-width:320px;scroll-snap-align:start;}
+  .bu2-swipe-hint{display:block;text-align:center;font-size:.76rem;letter-spacing:.14em;color:var(--text-muted);margin-top:2px;}
+  .bu2-ig{margin-top:60px;}
+  .bu2-ig-grid{grid-template-columns:repeat(3,1fr);gap:6px;margin-top:26px;}
+  .bu2-ig-tile{border-radius:6px;}
+}
+@media(min-width:701px){.bu2-swipe-hint{display:none;}}
+@media(max-width:480px){.bu2-ig-btn{width:100%;}}
+@media(max-width:380px){.bu2-occ-cap{padding:12px 10px 14px;}.bu2-occ-cap h3{font-size:1.1rem;}}
+</style>
+<script>
+(function(){
+  try{
+    /* ---------- settings you can edit ---------- */
+    const IG_HANDLE = "";   // e.g. "bloomsbyusman"  (leave empty until you add the real Instagram username)
+    const REVIEWS = [       // SAMPLE TEXT - replace with real customer reviews
+      {text:"The sunflower bouquet arrived fresh and beautifully wrapped. Exactly what I wanted for my sister's birthday.", who:"Bouquet customer · DHA, Karachi"},
+      {text:"Our mehndi backdrop looked stunning. Everything matched what we discussed and was ready on time.", who:"Mehndi decor client"},
+      {text:"The balloon setup for my son's birthday was a hit — guests kept asking who did it.", who:"Birthday decor client"},
+      {text:"Ordering on WhatsApp was so easy, and the flowers were still fresh when they arrived the same day.", who:"WhatsApp order customer"}
+    ];
+    /* ------------------------------------------- */
+
+    const anchor = document.getElementById("collections");
+    if(!anchor) return;
+    const link = (t)=> (typeof waLink==="function") ? waLink(t) : "https://wa.me/923132338818?text="+encodeURIComponent(t);
+    const esc = s => String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+    const waSvg = document.querySelector(".wa-float svg");
+    const WA_ICON = waSvg ? waSvg.outerHTML.replace(/<svg/,'<svg class="bu2-ico" aria-hidden="true"').replace(/ width="[^"]*"/,"").replace(/ height="[^"]*"/,"") : "";
+    const IG_ICON = '<svg class="bu2-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>';
+    const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.6 7.2.8-5.4 4.9 1.5 7.1L12 17.7 5.7 21.4l1.5-7.1L1.8 9.4 9 8.6z"/></svg>';
+
+    /* collect already-embedded gallery images (no duplicate data) */
+    const G = {};
+    document.querySelectorAll("#buGallery .bu-gal-group").forEach(g=>{
+      const n = g.querySelector("h3").textContent.trim();
+      G[n] = [...g.querySelectorAll("img")].map(i=>i.src);
+    });
+    const pic = (grp,n)=> (G[grp] && G[grp][n-1]) || "";
+    const IM = (typeof IMAGES!=="undefined") ? IMAGES : {};
+    const priceOf = name => { try{ const p = products.find(x=>x.name===name); return p ? p.price : null; }catch(e){ return null; } };
+    const img = (src,alt,extra)=> src ? `<img src="${src}" alt="${esc(alt)}" loading="lazy" decoding="async" ${extra||""}>` : "";
+
+    /* 1. BEST SELLERS */
+    const best = [
+      {name:"Sunflower & Baby's Breath Bouquet", tag:"Bestseller", src:IM.sunflower, desc:"Bright sunflowers with white baby's breath in kraft paper — a joyful everyday gift."},
+      {name:"Red Rose Heart Bouquet", tag:"Signature", src:IM.rose_heart, desc:"Dozens of red roses shaped into a heart, wrapped in premium black paper."},
+      {name:"Rustic Sunflower & Lisianthus Bouquet", tag:"Popular", src:IM.sunflower_white, desc:"Sunflowers with white lisianthus and statice, hand-wrapped in rustic kraft."},
+      {name:"Ivory White Rose Bouquet", tag:"Elegant", src:pic("Bouquets",10), desc:"Cream-white roses in sheer ivory wrapping — a clean, elegant gift."},
+      {name:"Red Rose & Gladiolus Bouquet", tag:"Romantic", src:pic("Bouquets",12), desc:"Deep red roses with tall white gladiolus, wrapped in black paper."},
+      {name:"Chocolate Flower Bouquet", tag:"Gift Favourite", src:pic("Bouquets",8), desc:"Chocolates and blooms arranged together in soft blush wrapping."}
+    ].map(b=>({...b, price:priceOf(b.name)}));
+    const bestHTML = best.map(b=>{
+      const msg = b.price ? `Hi Usman, I'd like to order: ${b.name} (PKR ${b.price.toLocaleString()})` : `Hi Usman, I'm interested in the ${b.name}. Could you share the price and availability?`;
+      return `<div class="card bu2-r">
+        <div class="card-photo">${img(b.src,b.name)}</div>
+        <span class="tag-pill">${esc(b.tag)}</span>
+        <h3>${esc(b.name)}</h3>
+        <div class="price${b.price?"":" bu2-soon"}">${b.price ? "PKR "+b.price.toLocaleString() : "Coming Soon"}</div>
+        <p>${esc(b.desc)}</p>
+        <a class="order-btn" href="${esc(link(msg))}" target="_blank" rel="noopener">${WA_ICON}<span>Order on WhatsApp</span></a>
+      </div>`;}).join("");
+
+    /* 2. SHOP BY OCCASION */
+    const occ = [
+      {n:"Birthday", s:"Balloons, bouquets & setups", src:pic("Balloon Decor",43)},
+      {n:"Anniversary", s:"Roses & romantic surprises", src:pic("Balloon Decor",4)},
+      {n:"Wedding", s:"Stage & floral backdrops", src:pic("Fresh Flower Decor",2)},
+      {n:"Engagement", s:"Arches & floral frames", src:pic("Fresh Flower Decor",11)},
+      {n:"Graduation", s:"Bright bouquets to celebrate", src:pic("Bouquets",5)},
+      {n:"Welcome", s:"Baby & homecoming decor", src:pic("Balloon Decor",42)},
+      {n:"Just Because", s:"Fresh flowers, no reason needed", src:pic("Bouquets",2)}
+    ];
+    const occHTML = occ.map(o=>`<a class="bu2-occ-card bu2-r" href="${esc(link("Hi Usman, I'm looking for flowers / decor for a "+o.n+". Could you help me with options?"))}" target="_blank" rel="noopener" aria-label="${esc(o.n)} — plan on WhatsApp">
+        ${img(o.src,o.n+" flowers and decor")}
+        <div class="bu2-occ-cap"><h3>${esc(o.n)}</h3><span>${esc(o.s)} →</span></div></a>`).join("");
+
+    /* 3. CUSTOM BOUQUET */
+    const customMsg = "Hi Usman, I'd like a customized bouquet.\nFlowers / colours:\nBudget:\nDate & delivery area:";
+
+    /* 4. ADD-ONS */
+    const ic = {
+      card:'<svg viewBox="0 0 64 64"><rect x="10" y="14" width="44" height="36" rx="4"/><path d="M10 20l22 16 22-16"/></svg>',
+      gift:'<svg viewBox="0 0 64 64"><rect x="10" y="26" width="44" height="26" rx="3"/><rect x="7" y="18" width="50" height="9" rx="2"/><path d="M32 18v34M32 18c-4-10-14-10-14-4s9 4 14 4zM32 18c4-10 14-10 14-4s-9 4-14 4z"/></svg>'
+    };
+    const addons = [
+      {n:"Chocolates", d:"Premium chocolates, wrapped beautifully alongside your bouquet.", src:pic("Bouquets",8)},
+      {n:"Teddy Bears", d:"A soft plush companion to make the surprise extra special.", src:pic("Balloon Decor",12)},
+      {n:"Greeting Cards", d:"A personal message card to go with your flowers.", icon:ic.card},
+      {n:"Balloons", d:"Colourful balloon bundles to brighten up the delivery.", src:pic("Balloon Decor",48)},
+      {n:"Gift Boxes", d:"Curated gift boxes that pair blooms with keepsakes.", icon:ic.gift},
+      {n:"Cakes", d:"Celebration cakes, ordered together with your flowers.", src:pic("Balloon Decor",43)}
+    ];
+    const addHTML = addons.map(a=>`<div class="bu2-addon bu2-r">
+        <div class="bu2-addon-photo">${a.src ? img(a.src,a.n) : a.icon}</div>
+        <div class="bu2-addon-body"><h3>${esc(a.n)}</h3><p>${esc(a.d)}</p>
+        <a class="bu2-add" href="${esc(link("Hi Usman, I'd like to add "+a.n+" to my order."))}" target="_blank" rel="noopener">${WA_ICON}<span>Add to my order</span></a></div></div>`).join("");
+
+    /* 5. REVIEWS + INSTAGRAM */
+    const stars = '<div class="bu2-stars" role="img" aria-label="5 out of 5 stars">'+STAR.repeat(5)+'</div>';
+    const revHTML = REVIEWS.map(r=>`<figure class="bu2-review bu2-r">${stars}<q>${esc(r.text)}</q><cite>${esc(r.who)}</cite></figure>`).join("");
+    const igUrl = IG_HANDLE ? "https://www.instagram.com/"+encodeURIComponent(IG_HANDLE)+"/" : "https://www.instagram.com/explore/search/keyword/?q=Blooms%20by%20Usman";
+    const igPics = [pic("Bouquets",3),pic("Balloon Decor",17),pic("Fresh Flower Decor",7),pic("Bouquets",6),
+                    pic("Balloon Decor",4),pic("Fresh Flower Decor",24),pic("Bouquets",1),pic("Balloon Decor",32),
+                    pic("Fresh Flower Decor",6),pic("Bouquets",10),pic("Balloon Decor",12),pic("Fresh Flower Decor",10)].filter(Boolean);
+    const igHTML = igPics.map((s,i)=>`<a class="bu2-ig-tile bu2-r" href="${esc(igUrl)}" target="_blank" rel="noopener" aria-label="View on Instagram">${img(s,"Blooms by Usman photo "+(i+1))}${IG_ICON.replace("bu2-ico","")}</a>`).join("");
+
+    const frag = document.createElement("div");
+    frag.id = "bu2-new-sections";
+    frag.innerHTML = `
+<section class="section" id="best-sellers"><div class="wrap">
+  <div class="section-head"><span class="tag">BEST SELLERS</span><h2>Our most-loved arrangements</h2></div>
+  <div class="grid bu2-bs">${bestHTML}</div>
+</div></section>
+
+<section class="section bu2-tint" id="occasions"><div class="wrap">
+  <div class="section-head"><span class="tag">SHOP BY OCCASION</span><h2>Flowers for every moment</h2></div>
+  <div class="bu2-occ">${occHTML}</div>
+</div></section>
+
+<section class="section bu2-custom" id="custom-bouquet"><div class="wrap">
+  <div class="bu2-custom-grid">
+    <div>
+      <div class="section-head" style="margin-bottom:0;"><span class="tag">CUSTOM BOUQUET</span><h2>Create Your Own Bouquet</h2>
+        <p class="bu2-sub">Have something specific in mind? Tell us your favourite flowers, colours and budget, and we'll hand-make a bouquet designed just for you — for gifting, proposals, or any occasion.</p></div>
+      <ul class="bu2-steps">
+        <li><b>1</b><span>Share your idea<small>Flowers, colours, wrapping, or just the occasion.</small></span></li>
+        <li><b>2</b><span>Confirm the details<small>We reply with options, price and delivery time.</small></span></li>
+        <li><b>3</b><span>We create &amp; deliver<small>Freshly hand-tied and delivered across Karachi.</small></span></li>
+      </ul>
+      <a class="bu2-wa-btn" href="${esc(link(customMsg))}" target="_blank" rel="noopener">${WA_ICON.replace('class="bu2-ico"','class="bu2-ico" style="width:22px;height:22px"')}<span>WhatsApp Us</span></a>
+    </div>
+    <div class="bu2-custom-photo"><div class="bu2-frame">${img(pic("Bouquets",7)||IM.sunflower,"Custom hand-tied bouquet by Blooms by Usman")}</div></div>
+  </div>
+</div></section>
+
+<section class="section" id="addons"><div class="wrap">
+  <div class="section-head"><span class="tag">ADD-ONS &amp; GIFTS</span><h2>Make it even more special</h2></div>
+  <div class="bu2-addons bu2-swipe">${addHTML}</div>
+  <p class="bu2-swipe-hint">SWIPE →</p>
+</div></section>
+
+<section class="section bu2-tint" id="reviews"><div class="wrap">
+  <div class="section-head"><span class="tag">REVIEWS</span><h2>Loved by our customers</h2></div>
+  <div class="bu2-reviews bu2-swipe">${revHTML}</div>
+  <p class="bu2-swipe-hint">SWIPE →</p>
+
+  <div class="bu2-ig bu2-center" id="instagram">
+    <div class="section-head bu2-center" style="margin-bottom:0;"><span class="tag">INSTAGRAM</span><h2>Follow the blooms${IG_HANDLE ? " · @"+esc(IG_HANDLE) : ""}</h2>
+      <p class="bu2-sub">A little peek at our latest bouquets, decor and celebrations.</p></div>
+    <div class="bu2-ig-grid">${igHTML}</div>
+    <div class="bu2-ig-cta"><a class="bu2-ig-btn" href="${esc(igUrl)}" target="_blank" rel="noopener">${IG_ICON}<span>Follow us on Instagram</span></a></div>
+  </div>
+</div></section>`;
+    anchor.after(...frag.children);
+
+    /* gentle reveal on scroll */
+    const els = document.querySelectorAll("#best-sellers .bu2-r,#occasions .bu2-r,#custom-bouquet .bu2-r,#addons .bu2-r,#reviews .bu2-r");
+    if("IntersectionObserver" in window){
+      document.documentElement.classList.add("bu2-js");
+      const io = new IntersectionObserver((en)=>en.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("bu2-in"); io.unobserve(e.target); } }),{rootMargin:"0px 0px -6% 0px",threshold:.05});
+      els.forEach((el,i)=>{ el.style.transitionDelay = ((i%4)*70)+"ms"; io.observe(el); });
+      setTimeout(()=>els.forEach(el=>el.classList.add("bu2-in")), 6000);
+    }
+  }catch(err){ console.error("New sections failed to load:", err); }
+})();
+</script>
+
 </body>
 </html>
