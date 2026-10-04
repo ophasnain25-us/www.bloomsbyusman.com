@@ -1166,5 +1166,251 @@ html[data-theme="dark"] .bu2-addon-photo{background:linear-gradient(135deg,#3b2a
   });
 })();
 </script>
+
+<!-- ===== Petal effect + Bouquet builder (additive; nothing above this line was changed) ===== -->
+<style>
+.bu3{background:linear-gradient(180deg,rgba(243,195,212,.16),rgba(255,224,234,.28));}
+html[data-theme="dark"] .bu3{background:linear-gradient(180deg,rgba(194,107,138,.08),rgba(194,107,138,.14));}
+.bu3-sub{color:var(--text-muted);font-size:1rem;line-height:1.65;margin-top:12px;max-width:56ch;}
+.bu3-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:34px;align-items:start;}
+.bu3-controls,.bu3-side{display:grid;gap:20px;}
+.bu3-step,.bu3-preview,.bu3-summary{background:var(--surface);border:1px solid var(--border-soft);border-radius:14px;padding:24px;}
+.bu3-step h3{font-size:1.35rem;color:var(--text);display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.bu3-step h3 b{flex:none;width:30px;height:30px;border-radius:50%;background:var(--rose-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+.bu3-step h3 small{font:300 .8rem 'Jost',sans-serif;color:var(--text-muted);}
+.bu3-flowers{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
+.bu3-fcard{border:1px solid var(--border-soft);border-radius:12px;padding:14px 10px;text-align:center;background:var(--bg);transition:border-color .2s,box-shadow .2s;}
+.bu3-fcard.has{border-color:var(--rose-deep);box-shadow:0 12px 22px -16px rgba(168,59,96,.55);}
+.bu3-fthumb{width:60px;height:60px;margin:0 auto 4px;}
+.bu3-fthumb svg{width:100%;height:100%;display:block;}
+.bu3-fname{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--text);}
+.bu3-fcolor{font-size:.76rem;color:var(--text-muted);margin:0 0 10px;}
+.bu3-swatches{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px;}
+.bu3-sw{position:relative;width:26px;height:26px;border-radius:50%;background:var(--c);border:2px solid var(--surface);box-shadow:0 0 0 1px var(--border-soft);cursor:pointer;padding:0;}
+.bu3-sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--rose-deep);}
+.bu3-sw i{position:absolute;top:-8px;right:-8px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--rose-deep);color:#fff;font:600 .62rem/16px 'Jost',sans-serif;font-style:normal;}
+.bu3-qty{display:inline-flex;align-items:center;border:1px solid var(--border-soft);border-radius:30px;background:var(--surface);overflow:hidden;}
+.bu3-qty button{width:34px;height:34px;border:0;background:none;color:var(--rose-deep);font-size:1.2rem;line-height:1;cursor:pointer;font-family:inherit;}
+.bu3-qty button:hover:not(:disabled){background:rgba(194,107,138,.14);}
+.bu3-qty button:disabled{opacity:.35;cursor:default;}
+.bu3-qty input{width:42px;border:0;background:none;text-align:center;color:var(--text);font:inherit;font-size:.95rem;font-weight:500;-moz-appearance:textfield;appearance:textfield;}
+.bu3-qty input::-webkit-outer-spin-button,.bu3-qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.bu3-chips{display:flex;flex-wrap:wrap;gap:10px;}
+.bu3-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-soft);background:var(--bg);color:var(--text);padding:10px 18px;border-radius:30px;font:inherit;font-size:.9rem;cursor:pointer;transition:background .2s,color .2s,border-color .2s;}
+.bu3-chip[aria-pressed="true"]{background:var(--rose-deep);border-color:var(--rose-deep);color:#fff;}
+.bu3-chip i{width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 0 1px rgba(0,0,0,.25);}
+.bu3-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.bu3-fields label{display:block;font-size:.78rem;letter-spacing:.06em;color:var(--text-muted);margin-bottom:6px;}
+.bu3-fields input{width:100%;background:var(--bg);border:1px solid var(--border-soft);border-radius:8px;padding:12px 14px;color:var(--text);font:inherit;font-size:.95rem;}
+.bu3-fields input:focus{outline:2px solid var(--rose-deep);outline-offset:1px;}
+.bu3-ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.bu3-ph h3,.bu3-summary h3{font-size:1.35rem;color:var(--text);}
+.bu3-count{background:var(--blush);color:var(--rose-deep);padding:4px 12px;border-radius:20px;font-size:.8rem;}
+html[data-theme="dark"] .bu3-count{background:rgba(194,107,138,.22);}
+.bu3-stage{position:relative;}
+.bu3-stage svg{width:100%;height:auto;max-height:430px;display:block;}
+.bu3-empty{position:absolute;top:30%;left:12%;right:12%;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.25rem;color:var(--text-muted);}
+.bu3-lines{list-style:none;margin-top:10px;}
+.bu3-line{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--border-soft);font-size:.92rem;color:var(--text);}
+.bu3-line:first-child{border-top:0;}
+.bu3-line span{flex:1;}
+.bu3-dot{flex:none;width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 0 1px var(--border-soft);}
+.bu3-line button{background:none;border:0;color:var(--text-muted);font-size:1.2rem;line-height:1;cursor:pointer;padding:2px 6px;}
+.bu3-meta span{color:var(--text-muted);}.bu3-meta b{font-weight:500;}
+.bu3-none{padding:14px 0 4px;color:var(--text-muted);font-size:.9rem;}
+.bu3-wa{display:flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:#fff;padding:15px 20px;border-radius:40px;font-size:1rem;margin-top:18px;box-shadow:0 16px 30px -14px rgba(37,211,102,.55);transition:transform .25s,background .25s,opacity .2s;}
+.bu3-wa:hover{background:#1ebc59;transform:translateY(-2px);}
+.bu3-wa[aria-disabled="true"]{opacity:.55;}
+.bu3-warn{min-height:1.2em;font-size:.84rem;color:var(--rose-deep);margin-top:10px;text-align:center;}
+.bu3-reset{display:block;margin:8px auto 0;background:none;border:0;color:var(--text-muted);font:inherit;font-size:.85rem;text-decoration:underline;cursor:pointer;}
+.bu3-fine{font-size:.76rem;color:var(--text-muted);line-height:1.5;margin-top:14px;text-align:center;}
+@media(min-width:961px) and (min-height:840px){.bu3-side{position:sticky;top:96px;}}
+@media(max-width:960px){.bu3-grid{grid-template-columns:1fr;gap:22px;}}
+@media(max-width:600px){.bu3-step,.bu3-preview,.bu3-summary{padding:18px;}.bu3-flowers{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}.bu3-fcard{padding:12px 6px;}.bu3-fields{grid-template-columns:1fr;}.bu3-qty button{width:30px;}.bu3-qty input{width:34px;}}
+</style>
+<script>
+(function(){
+  /* ===== 1. Petal effect: follows the mouse on desktop, drifts down on phones ===== */
+  try{
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches||typeof Path2D==='undefined')throw 0;
+    const touch=matchMedia('(hover: none), (pointer: coarse)').matches, AMB=touch?14:0;
+    const cv=document.createElement('canvas');
+    cv.setAttribute('aria-hidden','true');
+    cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9996;';
+    document.body.appendChild(cv);
+    const cx=cv.getContext('2d');let W=0,H=0;
+    const fit=()=>{const r=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*r;cv.height=H*r;cx.setTransform(r,0,0,r,0,0);};
+    fit();addEventListener('resize',fit);
+    const P=new Path2D('M0-1C.9-.7 .8 .6 0 1C-.8 .6-.9-.7 0-1Z');
+    const COL=['#f6c7d7','#ee9ab6','#e88aa8','#f9d3df','#d9a5b0','#fbb6cb'];
+    const ps=[];let run=false,last=0;
+    const add=(x,y,fall)=>ps.push({x,y,fall,s:5+Math.random()*5,vx:(Math.random()-.5)*(fall?.3:1.5),vy:fall?.5+Math.random()*.7:Math.random()*.6-.4,r:Math.random()*6.28,vr:(Math.random()-.5)*.07,f:Math.random()*6.28,vf:.03+Math.random()*.05,w:Math.random()*6.28,wf:.02+Math.random()*.02,wa:.25+Math.random()*.4,t:0,life:130+Math.random()*90,c:COL[Math.random()*COL.length|0],a:.7+Math.random()*.25});
+    const tick=now=>{
+      const dt=Math.min((now-last)/16.67,3);last=now;
+      cx.clearRect(0,0,W,H);
+      if(AMB&&ps.length<AMB&&Math.random()<.05*dt)add(Math.random()*W,-14,true);
+      for(let i=ps.length-1;i>=0;i--){
+        const p=ps[i];let al=p.a;
+        p.t+=dt;p.w+=p.wf*dt;p.r+=p.vr*dt;p.f+=p.vf*dt;
+        p.x+=(p.vx+Math.sin(p.w)*p.wa*1.4)*dt;p.y+=p.vy*dt;
+        if(p.fall){if(p.y>H+16){ps.splice(i,1);continue;}al*=Math.min(1,(p.y+14)/50);}
+        else{p.vy=Math.min(p.vy+.012*dt,1.3);p.vx*=.99;if(p.t>p.life){ps.splice(i,1);continue;}if(p.t>p.life*.6)al*=1-(p.t-p.life*.6)/(p.life*.4);}
+        cx.save();cx.globalAlpha=al;cx.translate(p.x,p.y);cx.rotate(p.r);
+        cx.scale(p.s*(.2+.8*Math.abs(Math.cos(p.f))),p.s);
+        cx.fillStyle=p.c;cx.fill(P);cx.scale(.55,.7);cx.fillStyle='rgba(255,255,255,.4)';cx.fill(P);cx.restore();
+      }
+      if(ps.length||AMB)requestAnimationFrame(tick);else run=false;
+    };
+    const kick=()=>{if(!run){run=true;last=performance.now();requestAnimationFrame(tick);}};
+    let lx=-1,ly=-1;
+    addEventListener('pointermove',e=>{
+      if(lx<0){lx=e.clientX;ly=e.clientY;return;}
+      if(Math.hypot(e.clientX-lx,e.clientY-ly)>(touch?40:24)){lx=e.clientX;ly=e.clientY;add(e.clientX,e.clientY,false);if(ps.length>90)ps.shift();kick();}
+    },{passive:true});
+    addEventListener('pointerdown',e=>{for(let i=0;i<(touch?5:6);i++)add(e.clientX+(Math.random()-.5)*16,e.clientY+(Math.random()-.5)*16,false);kick();},{passive:true});
+    if(AMB){for(let i=0;i<5;i++)add(Math.random()*innerWidth,Math.random()*innerHeight*.6,true);kick();}
+  }catch(err){}
+
+  /* ===== 2. Bouquet builder ===== */
+  try{
+    const anchor=document.getElementById('custom-bouquet')||document.getElementById('collections');
+    if(!anchor||document.getElementById('bouquet-builder'))return;
+    const FL=[
+      ['rose','Rose','Roses',[['Red','#c9264a'],['Pink','#ef8fb0'],['White','#fbf6f0'],['Peach','#f5b394'],['Yellow','#f3cf45']]],
+      ['tulip','Tulip','Tulips',[['Pink','#f08fb0'],['White','#fbf6f0'],['Purple','#9a6bc2'],['Yellow','#f3cf45'],['Red','#d93a4f']]],
+      ['sunflower','Sunflower','Sunflowers',[['Golden','#f4b81a'],['Orange','#ec8a14']]],
+      ['lily','Lily','Lilies',[['White','#fbf6f0'],['Pink','#f08fb0'],['Orange','#f19a3e']]],
+      ['gerbera','Gerbera','Gerberas',[['Orange','#f28a2e'],['Pink','#ee6f9c'],['Yellow','#f5cf3d'],['Red','#d93a4f'],['White','#fbf6f0']]],
+      ['carnation','Carnation','Carnations',[['Pink','#f08fb0'],['Red','#c9264a'],['White','#fbf6f0'],['Peach','#f5b394']]]
+    ].map(a=>({id:a[0],n:a[1],pl:a[2],c:a[3]}));
+    const WR=[['Kraft paper','#c9a57a'],['Black paper','#2f2a2d'],['Blush pink','#f3c3d4'],['Ivory sheer','#f4ecdf']];
+    const MAXL=60,MAXT=120,MAXH=40;
+    const S={q:{},sel:{},filler:false,green:false,wrap:0};
+    FL.forEach(f=>S.sel[f.id]=0);
+    const link=t=>typeof waLink==='function'?waLink(t):'https://wa.me/923132338818?text='+encodeURIComponent(t);
+    const w0=document.querySelector('.wa-float svg');
+    const WAI=w0?w0.outerHTML.replace(/ width="[^"]*"/,'').replace(/ height="[^"]*"/,'').replace('<svg','<svg style="width:22px;height:22px;flex:none" aria-hidden="true"'):'';
+
+    const sh=(h,a)=>{const n=parseInt(h.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const t=a<0?0:255,p=Math.abs(a);r=Math.round(r+(t-r)*p);g=Math.round(g+(t-g)*p);b=Math.round(b+(t-b)*p);return'#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);};
+    const bloom=(t,c)=>{const d=sh(c,-.15),e=sh(c,-.3),l=sh(c,.25);let s='';
+      if(t==='rose')s=`<circle r="31" fill="${d}"/><circle r="26" fill="${c}"/><path d="M-17-6C-12-22 13-22 17-4M-14 8C-8-12 10-12 14 6" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round"/><circle r="11" fill="${d}"/><path d="M-5 1C-5-7 7-7 6 0 5 7-6 5-4-2" fill="none" stroke="${e}" stroke-width="2" stroke-linecap="round"/><ellipse cx="-9" cy="-12" rx="7" ry="4" fill="${l}" opacity=".55" transform="rotate(-30 -9 -12)"/>`;
+      else if(t==='tulip')s=`<path d="M-23-4C-27 20 27 20 23-4C21-14 15-26 9-31C6-22 3-17 0-15C-3-17-6-22-9-31C-15-26-21-14-23-4Z" fill="${c}" stroke="${d}" stroke-width="1.6" stroke-linejoin="round"/><path d="M0-15C-9-4-9 12 0 20C9 12 9-4 0-15Z" fill="${l}" opacity=".7"/>`;
+      else if(t==='sunflower'){for(let i=0;i<14;i++)s+=`<ellipse cy="-23" rx="6.5" ry="13" fill="${d}" transform="rotate(${i*360/14})"/>`;for(let i=0;i<14;i++)s+=`<ellipse cy="-19" rx="6" ry="11" fill="${c}" transform="rotate(${i*360/14+13})"/>`;s+='<circle r="14" fill="#5b3a1e"/><circle r="9" fill="#3f2813"/><circle r="3" fill="#7a5230"/>';}
+      else if(t==='lily'){for(let i=0;i<6;i++)s+=`<path d="M0 0C-11-10-8-27 0-34C8-27 11-10 0 0Z" fill="${c}" stroke="${d}" stroke-width="1" transform="rotate(${i*60})"/><path d="M0-4V-26" stroke="${d}" stroke-width="1.2" opacity=".5" transform="rotate(${i*60})"/>`;for(let i=0;i<5;i++)s+=`<path d="M0 0L${(Math.sin(i*1.26)*13).toFixed(1)} ${(-Math.cos(i*1.26)*13).toFixed(1)}" stroke="#b5651d" stroke-width="1.4"/><circle cx="${(Math.sin(i*1.26)*13).toFixed(1)}" cy="${(-Math.cos(i*1.26)*13).toFixed(1)}" r="2.3" fill="#b5651d"/>`;}
+      else if(t==='gerbera'){for(let i=0;i<20;i++)s+=`<ellipse cy="-21" rx="3.6" ry="14" fill="${i%2?c:d}" transform="rotate(${i*18})"/>`;s+='<circle r="9" fill="#4a2f26"/><circle r="5" fill="#7a4a2a"/>';}
+      else{for(let i=0;i<12;i++)s+=`<circle cy="-19" r="9" fill="${c}" stroke="${d}" stroke-width="1" transform="rotate(${i*30})"/>`;s+=`<circle r="21" fill="${c}"/><path d="M-10-6Q0-14 10-6M-12 5Q0-3 12 5" fill="none" stroke="${e}" stroke-width="1.6" stroke-linecap="round"/><circle r="4" fill="${d}"/>`;}
+      return s;};
+
+    const tot=()=>Object.values(S.q).reduce((a,b)=>a+b,0);
+    const rows=()=>{const o=[];FL.forEach(f=>f.c.forEach((c,i)=>{const k=f.id+'|'+i,q=S.q[k]||0;if(q)o.push({f,c,i,q,k});}));return o;};
+    const nm=r=>r.c[0]+' '+(r.q>1?r.f.pl:r.f.n);
+    const stems=()=>{const o=[];rows().forEach(r=>{for(let k=0;k<r.q;k++)o.push({t:r.f.id,c:r.c[1],key:(k+.5)/r.q});});return o.sort((a,b)=>a.key-b.key);};
+
+    function draw(){
+      const L=stems(),n=L.length,wc=WR[S.wrap][1],rb='#c26b8a';
+      let s=7;const rnd=()=>(s=s*16807%2147483647)/2147483647;
+      let o='<svg viewBox="0 0 400 480" role="img" aria-label="Preview of your custom bouquet"><ellipse cx="200" cy="470" rx="70" ry="7" fill="rgba(0,0,0,.12)"/>';
+      o+=`<path d="M64 236Q200 282 336 236L214 458Q200 466 186 458Z" fill="${sh(wc,-.14)}"/>`;
+      if(n){
+        const M=Math.min(n,MAXH),pk=[];for(let j=0;j<M;j++)pk.push(L[Math.floor((j+.5)*n/M)]);
+        const f=Math.max(.4,Math.min(1,Math.sqrt(M/14))),cx=200,cy=178+(1-f)*34,rx=112*f,ry=92*f,d=Math.max(30,Math.min(80,Math.sqrt(52000/M)));
+        if(S.green)for(let i=0;i<16;i++){const a=Math.PI-.3+i*(Math.PI+.6)/15,x=cx+Math.cos(a)*rx*1.08,y=cy+Math.sin(a)*ry*1.08;o+=`<path d="M0 0C-9-10-8-26 0-40C8-26 9-10 0 0Z" fill="${i%2?'#6f9f7e':'#86b293'}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(a*57.3+90).toFixed(0)}) scale(${(.55+.5*f).toFixed(2)})"/>`;}
+        const pos=pk.map((p,i)=>{const r=Math.sqrt((i+.5)/M),th=i*2.39996;return{p,r,x:cx+r*rx*Math.cos(th),y:cy+r*ry*Math.sin(th)};});
+        pos.forEach(q=>o+=`<path d="M${q.x.toFixed(1)} ${q.y.toFixed(1)}Q${q.x.toFixed(1)} ${(q.y+70).toFixed(1)} ${(200+(q.x-200)*.1).toFixed(1)} 335" stroke="#6a965f" stroke-width="2.6" fill="none" stroke-linecap="round"/>`);
+        for(let i=M-1;i>=0;i--){const q=pos[i],k=d*(1-.16*q.r)/64;o+=`<g transform="translate(${q.x.toFixed(1)} ${q.y.toFixed(1)}) rotate(${(i*53)%360}) scale(${k.toFixed(3)})">${bloom(q.p.t,q.p.c)}</g>`;}
+        if(S.filler)for(let i=0;i<46;i++){const a=Math.PI-.35+rnd()*(Math.PI+.7),r=.78+rnd()*.42,x=cx+Math.cos(a)*rx*r*1.05,y=cy+Math.sin(a)*ry*r*1.05;o+=`<g fill="#fff" stroke="rgba(110,90,100,.35)" stroke-width=".7"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.7"/><circle cx="${(x+4).toFixed(1)}" cy="${(y-3).toFixed(1)}" r="2.1"/><circle cx="${(x-3).toFixed(1)}" cy="${(y-4).toFixed(1)}" r="1.9"/></g>`;}
+      }
+      o+=`<path d="M84 278Q200 332 316 278L212 460Q200 468 188 460Z" fill="${wc}"/><path d="M200 330L212 460 196 463Z" fill="${sh(wc,.22)}" opacity=".55"/><path d="M84 278L196 463M316 278L204 463" stroke="${sh(wc,-.25)}" stroke-width="1.5" opacity=".5" fill="none"/>`;
+      o+=`<path d="M200 352C165 318 148 364 192 358ZM200 352C235 318 252 364 208 358Z" fill="${rb}"/><path d="M197 358L180 398M203 358L222 396" stroke="${rb}" stroke-width="5" stroke-linecap="round"/><circle cx="200" cy="355" r="7" fill="${sh(rb,-.18)}"/></svg>`;
+      return o;
+    }
+
+    const flowersHTML=FL.map(f=>`<div class="bu3-fcard" data-f="${f.id}"><div class="bu3-fthumb"></div><div class="bu3-fname">${f.n}</div><p class="bu3-fcolor"></p><div class="bu3-swatches" role="group" aria-label="${f.n} colour">${f.c.map((c,i)=>`<button type="button" class="bu3-sw" style="--c:${c[1]}" data-a="sw" data-f="${f.id}" data-i="${i}" title="${c[0]}" aria-label="${c[0]}"></button>`).join('')}</div><div class="bu3-qty"><button type="button" data-a="q" data-f="${f.id}" data-d="-1">&minus;</button><input type="number" inputmode="numeric" min="0" max="${MAXL}" value="0" data-a="in" data-f="${f.id}"><button type="button" data-a="q" data-f="${f.id}" data-d="1">+</button></div></div>`).join('');
+    const sec=document.createElement('section');
+    sec.className='section bu3';sec.id='bouquet-builder';
+    sec.innerHTML=`<div class="wrap">
+ <div class="section-head"><span class="tag">BOUQUET BUILDER</span><h2>Design your own bouquet</h2><p class="bu3-sub">Choose your flowers, colours and wrapping, watch your bouquet take shape, then send it straight to Usman on WhatsApp. We'll confirm availability and your exclusive price.</p></div>
+ <div class="bu3-grid">
+  <div class="bu3-controls">
+   <div class="bu3-step"><h3><b>1</b>Pick your flowers</h3><div class="bu3-flowers">${flowersHTML}</div></div>
+   <div class="bu3-step"><h3><b>2</b>Fillers &amp; greenery</h3><div class="bu3-chips"><button type="button" class="bu3-chip" data-a="opt" data-k="filler">Baby's breath</button><button type="button" class="bu3-chip" data-a="opt" data-k="green">Eucalyptus greenery</button></div></div>
+   <div class="bu3-step"><h3><b>3</b>Choose your wrapping</h3><div class="bu3-chips">${WR.map((w,i)=>`<button type="button" class="bu3-chip" style="--c:${w[1]}" data-a="wr" data-i="${i}"><i></i>${w[0]}</button>`).join('')}</div></div>
+   <div class="bu3-step"><h3><b>4</b>Final touches <small>(optional)</small></h3><div class="bu3-fields"><div><label for="bu3Msg">CARD MESSAGE</label><input id="bu3Msg" maxlength="120" placeholder="e.g. Happy Birthday, Ayesha!"></div><div><label for="bu3When">DELIVERY DATE &amp; AREA</label><input id="bu3When" maxlength="120" placeholder="e.g. Friday, DHA Phase 5"></div></div></div>
+  </div>
+  <aside class="bu3-side">
+   <div class="bu3-preview"><div class="bu3-ph"><h3>Live preview</h3><span class="bu3-count" id="bu3Count">0 stems</span></div><div class="bu3-stage"><div id="bu3Svg"></div><p class="bu3-empty" id="bu3Empty">Add a flower to watch your bouquet bloom.</p></div></div>
+   <div class="bu3-summary"><h3>Your bouquet</h3><ul class="bu3-lines" id="bu3Lines"></ul><p class="bu3-warn" id="bu3Warn" role="status"></p><a class="bu3-wa" id="bu3Wa" target="_blank" rel="noopener">${WAI}<span>Order on WhatsApp</span></a><button type="button" class="bu3-reset" data-a="reset">Start over</button><p class="bu3-fine">Illustration only &mdash; every bouquet is hand-tied by Usman and may vary slightly with seasonal availability. The final price is confirmed on WhatsApp.</p></div>
+  </aside>
+ </div></div>`;
+    anchor.insertAdjacentElement('afterend',sec);
+    const $=q=>sec.querySelector(q);
+    const setQ=(f,v)=>{const k=f+'|'+S.sel[f],cur=S.q[k]||0;v=Math.max(0,Math.min(MAXL,v|0));v=Math.min(v,MAXT-(tot()-cur));if(v>0)S.q[k]=v;else delete S.q[k];};
+
+    function sync(force){
+      const t=tot();
+      FL.forEach(f=>{
+        const card=$(`.bu3-fcard[data-f="${f.id}"]`),ci=S.sel[f.id],q=S.q[f.id+'|'+ci]||0;let any=false;
+        card.querySelectorAll('.bu3-sw').forEach((sw,i)=>{
+          sw.setAttribute('aria-pressed',i===ci);
+          const n=S.q[f.id+'|'+i]||0;if(n)any=true;
+          let bd=sw.querySelector('i');
+          if(n){if(!bd)bd=sw.appendChild(document.createElement('i'));bd.textContent=n;}else if(bd)bd.remove();
+        });
+        card.classList.toggle('has',any);
+        card.querySelector('.bu3-fcolor').textContent=f.c[ci][0];
+        card.querySelector('.bu3-fthumb').innerHTML=`<svg viewBox="-36 -36 72 72" aria-hidden="true">${bloom(f.id,f.c[ci][1])}</svg>`;
+        const inp=card.querySelector('input'),bt=card.querySelectorAll('.bu3-qty button'),lab=f.c[ci][0]+' '+f.n;
+        if(force||document.activeElement!==inp)inp.value=q;
+        inp.setAttribute('aria-label','Quantity of '+lab);bt[0].setAttribute('aria-label','Remove one '+lab);bt[1].setAttribute('aria-label','Add one '+lab);
+        bt[0].disabled=!q;bt[1].disabled=q>=MAXL||t>=MAXT;
+      });
+      sec.querySelectorAll('[data-a="opt"]').forEach(b=>b.setAttribute('aria-pressed',!!S[b.dataset.k]));
+      sec.querySelectorAll('[data-a="wr"]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===S.wrap));
+      $('#bu3Svg').innerHTML=draw();
+      $('#bu3Empty').hidden=t>0;
+      $('#bu3Count').textContent=t+(t===1?' stem':' stems');
+      const R=rows(),msg=$('#bu3Msg').value.trim(),when=$('#bu3When').value.trim(),wa=$('#bu3Wa');
+      let h=R.map(r=>`<li class="bu3-line" style="--c:${r.c[1]}"><i class="bu3-dot"></i><span>${r.q} &times; ${nm(r)}</span><button type="button" data-a="rm" data-k="${r.k}" aria-label="Remove ${nm(r)}">&times;</button></li>`).join('');
+      if(R.length){
+        const ex=[['Total stems',t]];
+        if(S.filler)ex.push(['Filler',"Baby's breath"]);
+        if(S.green)ex.push(['Greenery','Eucalyptus']);
+        ex.push(['Wrapping',WR[S.wrap][0]]);
+        h+=ex.map(x=>`<li class="bu3-line bu3-meta"><span>${x[0]}</span><b>${x[1]}</b></li>`).join('');
+        const L=["Hi Usman, I'd like to order a custom bouquet:",'',...R.map(r=>`• ${r.q} × ${nm(r)}`),'','Total stems: '+t];
+        if(S.filler)L.push("Filler: Baby's breath");
+        if(S.green)L.push('Greenery: Eucalyptus');
+        L.push('Wrapping: '+WR[S.wrap][0]);
+        if(msg)L.push('Card message: "'+msg+'"');
+        if(when)L.push('Delivery date & area: '+when);
+        L.push('','Could you please confirm availability and the price?');
+        wa.href=link(L.join('\n'));wa.removeAttribute('aria-disabled');$('#bu3Warn').textContent='';
+      }else{
+        h='<li class="bu3-none">Nothing here yet &mdash; pick a flower to begin.</li>';
+        wa.href='#bouquet-builder';wa.setAttribute('aria-disabled','true');
+      }
+      $('#bu3Lines').innerHTML=h;
+    }
+
+    sec.addEventListener('click',e=>{
+      const b=e.target.closest('[data-a]');if(!b)return;
+      const a=b.dataset.a,f=b.dataset.f;
+      if(a==='wa')return;
+      if(a==='sw')S.sel[f]=+b.dataset.i;
+      else if(a==='q')setQ(f,(S.q[f+'|'+S.sel[f]]||0)+(+b.dataset.d));
+      else if(a==='rm')delete S.q[b.dataset.k];
+      else if(a==='opt')S[b.dataset.k]=!S[b.dataset.k];
+      else if(a==='wr')S.wrap=+b.dataset.i;
+      else if(a==='reset'){S.q={};S.filler=S.green=false;S.wrap=0;$('#bu3Msg').value='';$('#bu3When').value='';}
+      else return;
+      sync();
+    });
+    sec.addEventListener('change',e=>{const i=e.target.closest('[data-a="in"]');if(i){setQ(i.dataset.f,parseInt(i.value,10)||0);sync(true);}});
+    sec.addEventListener('input',e=>{if(e.target.id==='bu3Msg'||e.target.id==='bu3When')sync();});
+    $('#bu3Wa').addEventListener('click',e=>{if(e.currentTarget.getAttribute('aria-disabled')==='true'){e.preventDefault();$('#bu3Warn').textContent='Please add at least one flower first.';}});
+    sync();
+  }catch(err){console.error('Bouquet builder failed to load:',err);}
+})();
+</script>
 </body>
 </html>
